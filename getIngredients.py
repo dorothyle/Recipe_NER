@@ -32,28 +32,25 @@ def convert_floats_to_fractions(text: str) -> str:
         )
 
 
-def process_text(text):
-  """
-  A wrapper function to pre-process text and run it through our pipeline.
-  """
-  return nlp(convert_floats_to_fractions(text))
+# Recieves an ingredient and returns 1 or more food entities
+def process_ingredient(ingredient):
+    """
+    A wrapper function to pre-process ingredient and run it through our pipeline.
+    """
+    doc = nlp(convert_floats_to_fractions(ingredient))
+    food_entities = []
+    for ent in doc.ents:
+       if ent.label_ == "FOOD":
+          food_entities.append(ent.text)
+    return food_entities
 
 # Checks conversion of floats to fractions
 # print([convert_floats_to_fractions(line) for line in scraper.ingredients()])
 
 from spacy import displacy
 # process the recipe, line-by-line
-docs = [process_text(line) for line in scraper.ingredients()]
-print("DOCS:", docs)
-# displacy.serve(docs, style="ent", port=5050)
-print("TYPE:", type(docs))
-
-for doc in docs:
-    print("INGREDIENT:", doc)
-    foods = []
-    for ent in doc.ents:
-       if ent.label_ == "FOOD":
-          foods.append(ent.text)
-        
-    print("Food:", ', '.join(foods))
-    print("\n") 
+ingredient_list = set()
+for line in scraper.ingredients():
+   foods = process_ingredient(line)
+   ingredient_list.update(foods)
+print("ingredient_list:", ingredient_list)
