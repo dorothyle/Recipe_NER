@@ -45,5 +45,15 @@ from spacy import displacy
 # process the recipe, line-by-line
 docs = [process_text(line) for line in scraper.ingredients()]
 print("DOCS:", docs)
-displacy.serve(docs, style="ent", port=5050)
+# displacy.serve(docs, style="ent", port=5050)
 print("TYPE:", type(docs))
+
+for doc in docs:
+    print("INGREDIENT:", doc)
+    foods = []
+    for ent in doc.ents:
+       if ent.label_ == "FOOD":
+          foods.append(ent.text)
+        
+    print("Food:", ', '.join(foods))
+    print("\n") 
