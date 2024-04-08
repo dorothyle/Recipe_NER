@@ -1,8 +1,12 @@
+import spacy
+# Load model
+nlp = spacy.load("output_eff/model-best")
+
 from recipe_scrapers import scrape_me
 
 RECIPE_URL = "https://www.allrecipes.com/recipe/246868/pecan-sour-cream-coffee-cake/"
 scraper = scrape_me(RECIPE_URL)
-print(scraper.ingredients())
+# print(scraper.ingredients()) # Prints ingredients scraped from website
 
 # Convert quantities as fractions
 from fractions import Fraction
@@ -35,4 +39,11 @@ def process_text(text):
   return nlp(convert_floats_to_fractions(text))
 
 # Checks conversion of floats to fractions
-print([convert_floats_to_fractions(line) for line in scraper.ingredients()])
+# print([convert_floats_to_fractions(line) for line in scraper.ingredients()])
+
+from spacy import displacy
+# process the recipe, line-by-line
+docs = [process_text(line) for line in scraper.ingredients()]
+print("DOCS:", docs)
+displacy.serve(docs, style="ent", port=5050)
+print("TYPE:", type(docs))
