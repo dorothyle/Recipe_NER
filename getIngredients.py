@@ -49,8 +49,9 @@ def process_ingredient(ingredient):
 
 from spacy import displacy
 # process the recipe, line-by-line
-ingredient_list = set()
-for line in scraper.ingredients():
-   foods = process_ingredient(line)
-   ingredient_list.update(foods)
-print("ingredient_list:", ingredient_list)
+def cleanIngredients(uncleaned_ingredients):
+  ingredient_list = set()
+  for line in uncleaned_ingredients:
+    foods = process_ingredient(line)
+    ingredient_list.update(foods)
+  return list(ingredient_list)
